@@ -1,11 +1,12 @@
-# Big Ben Clock Discord bot
-This repository contains the source code for a discord bot that chimes every hour of the day.
+# Big Ben | HOF Branch
+This Branch Contains an "HOF" Edition of the Bot. It Personalizes the Bot a bit more, and tweaks it in some other ways a bit.
 
+  
 ## Installation with Docker
 If you want to run the big-ben clock discord bot on docker you can do that with the following command:
    
 ```
-docker run --name BigBen-Bot --env BOT_TOKEN="<Replace with Discord-Bot Token>" --env DATABASE_URL="postgres://username:password@IP/Localhost:5432/DatabaseName" --env DATABASE_SECURE=true kippenhof/bigbendiscord
+docker run --name BigBen-Bot --env BOT_TOKEN="<Replace with Discord-Bot Token>" --env DATABASE_URL="postgres://username:password@IP/Localhost:5432/DatabaseName" --env DATABASE_SECURE=true kippenhof/bigbendiscord:HOF
 ``` 
 
 
