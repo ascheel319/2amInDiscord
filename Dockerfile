@@ -1,6 +1,6 @@
 FROM node:12.22.1-alpine3.12
 
-WORKDIR /opt/bigben-bot/
+WORKDIR /opt/2amInDscord/
 COPY . .
 
 # Source https://github.com/Docker-Hub-frolvlad/docker-alpine-python3/blob/master/Dockerfile

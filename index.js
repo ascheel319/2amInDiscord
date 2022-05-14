@@ -1,7 +1,7 @@
-const TwoamInDiscord = require('./TwoamInDiscord');
+const TwoamInDiscord = require('./2amInDiscord');
 
 // Create the Big Ben Clock instance
-const TwoamInDiscord = new TwoamInDiscord();
+const twoamInDiscord = new TwoamInDiscord();
 
 // Initialise the bot
-TwoamInDiscord.init().catch(console.error);
+twoamInDiscord.init().catch(console.error);
