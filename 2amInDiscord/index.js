@@ -6,9 +6,9 @@ const _ = require('lodash');
 
 const Database = require('../Database');
 
-class BigBenClock {
+class TwoamInDiscord {
     /**
-     * BigBenClock constructor
+     * 2amInDiscord constructor
      */
     constructor() {
         // Fetch the bot token from the environment
@@ -62,7 +62,7 @@ class BigBenClock {
         // Catch the message event
         this.bot.on('message', (message) => {
             // Command prefix
-            let prefix = "!bigbenclock";
+            let prefix = "!2amInDiscord";
 
             // Set a voice channel as the "big ben clock" channel
             if (message.content.trim().startsWith(prefix)) {
@@ -96,29 +96,6 @@ class BigBenClock {
                     } else {
                         message.channel.send(`Could not find voice channel '${channelName}'`);
                     }
-                } else if (command === "frequency") {
-                    // Find the servers record
-                    this.database.getServer(message.guild.id).then((response) => {
-                        let server = response.rows[0];
-
-                        if (server && !_.isEmpty(server.channel_id)) {
-                            let frequency = parseInt(args.join());
-
-                            // Update the frequency
-                            if (_.inRange(frequency, 1, 13)) {
-                                this.database.setServerFrequency(message.guild.id, frequency);
-
-                                // Calculate the times that are now active
-                                let times = _.range(1, 13).filter((hour) => hour % frequency === 0);
-
-                                message.channel.send(`Big Ben will now chime at: ${times.join(" O'Clock, ").trim()} O'Clock`);
-                            } else {
-                                message.channel.send("Frequency must be between 1 and 12 (For example: a frequency of 3 would chime at 3 O'Clock, 6 O'Clock, 9 O'Clock and 12 O'Clock)");
-                            }
-                        } else {
-                            message.channel.send(`You must set a voice channel before setting a frequency (!bigbenclock set <voice channel name>)`);
-                        }
-                    });
                 } else if (command === "test") {
                     // Find the servers record
                     this.database.getServer(message.guild.id).then((response) => {
@@ -142,7 +119,7 @@ class BigBenClock {
                                         message.channel.send(`Leaving...`);
                                         channel.leave();
                                     } else {
-                                        const dispatcher = connection.play("./Assets/test.mp3");
+                                        const dispatcher = connection.play("./Assets/WhyAreYouOnDiscord.mp3");
 
                                         message.channel.send(`Attempting to play test sound in ${channel.id}...`);
 
@@ -158,7 +135,7 @@ class BigBenClock {
                                 message.channel.send("Could not find your server, please kick and re-invite the Big Ben Clock bot.");
                             }
                         } else {
-                            message.channel.send(`You must set a voice channel before setting a frequency (!bigbenclock set <voice channel name>)`);
+                            message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
                         }
                     });
                 } else if (command === "mute") {
@@ -187,9 +164,9 @@ class BigBenClock {
 
                             this.database.setMuteUntil(message.guild.id, until.format('YYYY-MM-DD HH:mm:ss'));
 
-                            message.channel.send(`Muting Big Ben Clock until ${until.format('dddd, MMMM Do YYYY, HH:mm:ss')}. Use "!bigbenclock unmute" to unmute sooner.`);
+                            message.channel.send(`Muting Big Ben Clock until ${until.format('dddd, MMMM Do YYYY, HH:mm:ss')}. Use "!2amInDiscord unmute" to unmute sooner.`);
                         } else {
-                            message.channel.send(`You must set a voice channel before setting a frequency (!bigbenclock set <voice channel name>)`);
+                            message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
                         }
                     });
                 } else if (command === "unmute") {
@@ -202,11 +179,11 @@ class BigBenClock {
 
                             message.channel.send(`Unmuted Big Ben Clock.`);
                         } else {
-                            message.channel.send(`You must set a voice channel before setting a frequency (!bigbenclock set <voice channel name>)`);
+                            message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
                         }
                     });
                 } else {
-                    message.channel.send("Available commands:\n\n!bigbenclock set <voice channel name>\n!bigbenclock frequency <1-12>\n!bigbenclock test\n!bigbenclock mute <tomorrow/week/specific date (format: YYYY-MM-DD)>\n!bigbenclock unmute");
+                    message.channel.send("Available commands:\n\n!2amInDiscord set <voice channel name>\n!2amInDiscord frequency <1-12>\n!2amInDiscord test\n!2amInDiscord mute <tomorrow/week/specific date (format: YYYY-MM-DD)>\n!2amInDiscord unmute");
                 }
             }
         });
@@ -217,7 +194,8 @@ class BigBenClock {
      */
     createScheduler() {
         // Schedule a job for every hour
-        schedule.scheduleJob('0 * * * *', () => {
+        //schedule.scheduleJob('0 * * * *', () => {
+        schedule.scheduleJob('0 2 * * *', () => {
             // Get the hour
             let hour = moment().format('h');
 
@@ -231,9 +209,6 @@ class BigBenClock {
                 servers.forEach((server) => {
                     // Attempt to find the guild
                     let guild = this.bot.guilds.cache.find((guild) => guild.id === server.server_id);
-
-                    // Determine if we should play a chime based on the servers frequency setting
-                    let playChimes = server.frequency !== null ? hour % server.frequency === 0 : true;
 
                     // Determine if we should play a chime base do the servers "mute until" setting
                     if (server.mute_until && typeof server.mute_until === "string" && moment(server.mute_until).isAfter(moment())) {
@@ -251,7 +226,7 @@ class BigBenClock {
                             channel.join().then((connection) => {
                                 const dispatcher = connection.play(`./Assets/${hour}.mp3`);
 
-                                console.info(`Playing ./Assets/${hour}.mp3 in channel ${channel.id}`);
+                                console.info(`Playing ./Assets/WhyAreYouOnDiscord.mp3 in channel ${channel.id}`);
 
                                 // Leave the channel once we're done
                                 dispatcher.on("finish", () => {
@@ -280,4 +255,4 @@ class BigBenClock {
     }
 }
 
-module.exports = BigBenClock;
+module.exports = TwoamInDiscord;
