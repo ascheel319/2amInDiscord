@@ -1,7 +1,7 @@
 {
-    "name": "big-ben-clock-discord-bot",
+    "name": "2amindiscord-discord-bot",
     "version": "1.0.0",
-    "description": "Big Ben Clock Discord bot",
+    "description": "2am In Discord Discord bot",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,7 @@
         "node": "12.x",
         "npm": "*"
     },
-    "author": "Jamie Sage (https://jamiesage.co.uk)",
+    "author": "Andrew Scheel",
     "dependencies": {
         "discord.js": "12.5.3",
         "dotenv": "^8.2.0",

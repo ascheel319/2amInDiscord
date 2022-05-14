@@ -53,6 +53,9 @@ class TwoamInDiscord {
 
         // Log the bot in
         await this.bot.login(this.botToken);
+
+        // Hide Bot
+        this.bot.user.setStatus('Invisible');
     }
 
     /**
@@ -64,7 +67,7 @@ class TwoamInDiscord {
             // Command prefix
             let prefix = "!2amInDiscord";
 
-            // Set a voice channel as the "big ben clock" channel
+            // Set a voice channel as the "2amInDiscord" channel
             if (message.content.trim().startsWith(prefix)) {
                 // Fetch the arguments of the command
                 const args = message.content.replace(`${prefix} `, "").split(" ");
@@ -88,7 +91,7 @@ class TwoamInDiscord {
 
                         // Add the channel
                         this.database.addServer(message.guild.id, voiceChannel.id).then(() => {
-                            message.channel.send(`Set '${voiceChannel.name}' as big ben voice channel`);
+                            message.channel.send(`Set '${voiceChannel.name}' as 2amInDiscord voice channel`);
                         }).catch((err) => {
                             message.channel.send(`Oh no! Something went wrong while setting your channel`);
                             console.error(err);
@@ -132,7 +135,7 @@ class TwoamInDiscord {
                                     }
                                 });
                             } else {
-                                message.channel.send("Could not find your server, please kick and re-invite the Big Ben Clock bot.");
+                                message.channel.send("Could not find your server, please kick and re-invite the 2amInDiscord bot.");
                             }
                         } else {
                             message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
@@ -164,7 +167,7 @@ class TwoamInDiscord {
 
                             this.database.setMuteUntil(message.guild.id, until.format('YYYY-MM-DD HH:mm:ss'));
 
-                            message.channel.send(`Muting Big Ben Clock until ${until.format('dddd, MMMM Do YYYY, HH:mm:ss')}. Use "!2amInDiscord unmute" to unmute sooner.`);
+                            message.channel.send(`Muting 2amInDiscord until ${until.format('dddd, MMMM Do YYYY, HH:mm:ss')}. Use "!2amInDiscord unmute" to unmute sooner.`);
                         } else {
                             message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
                         }
@@ -177,7 +180,7 @@ class TwoamInDiscord {
                         if (server && !_.isEmpty(server.channel_id)) {
                             this.database.setMuteUntil(message.guild.id, null);
 
-                            message.channel.send(`Unmuted Big Ben Clock.`);
+                            message.channel.send(`Unmuted 2amInDiscord.`);
                         } else {
                             message.channel.send(`You must set a voice channel before setting a frequency (!2amInDiscord set <voice channel name>)`);
                         }
@@ -224,7 +227,8 @@ class TwoamInDiscord {
                         if (channel && channel.members.array().length > 0) {
                             // Play the chime
                             channel.join().then((connection) => {
-                                const dispatcher = connection.play(`./Assets/${hour}.mp3`);
+                                // const dispatcher = connection.play(`./Assets/${hour}.mp3`);
+                                const dispatcher = connection.play("./Assets/WhyAreYouOnDiscord.mp3");
 
                                 console.info(`Playing ./Assets/WhyAreYouOnDiscord.mp3 in channel ${channel.id}`);
 
