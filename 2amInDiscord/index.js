@@ -43,6 +43,9 @@ class TwoamInDiscord {
             this.createScheduler();
         });
 
+        // Hide Bot
+        this.bot.user.setStatus('Invisible');
+
         // Catch any errors
         this.bot.on('error', (error) => {
             console.error(error);
@@ -53,9 +56,6 @@ class TwoamInDiscord {
 
         // Log the bot in
         await this.bot.login(this.botToken);
-
-        // Hide Bot
-        this.bot.user.setStatus('Invisible');
     }
 
     /**
