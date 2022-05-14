@@ -1,3 +1,8 @@
+# I am changing this to connect to a chosen vc and say "it's 2am in your timezone, why are you in discord?" and then leave
+
+
+
+
 # Big Ben Clock Discord bot
 This repository contains the source code for a discord bot that chimes every hour of the day.
 
