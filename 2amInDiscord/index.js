@@ -34,6 +34,7 @@ class TwoamInDiscord {
 
         // Create an event for when the bot is ready
         this.bot.on('ready', () => {
+            this.bot.user.setStatus('invisible');
             console.info(`Logged in as ${this.bot.user.tag}!`);
 
             // Register any commands
@@ -42,9 +43,6 @@ class TwoamInDiscord {
             // Create the scheduler
             this.createScheduler();
         });
-
-        // Hide Bot
-        this.bot.user.setStatus('Invisible');
 
         // Catch any errors
         this.bot.on('error', (error) => {
