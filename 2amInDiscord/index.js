@@ -97,6 +97,29 @@ class TwoamInDiscord {
                     } else {
                         message.channel.send(`Could not find voice channel '${channelName}'`);
                     }
+                } else if (command === "frequency") {
+                    // Find the servers record
+                    this.database.getServer(message.guild.id).then((response) => {
+                        let server = response.rows[0];
+
+                        if (server && !_.isEmpty(server.channel_id)) {
+                            let frequency = parseInt(args.join());
+
+                            // Update the frequency
+                            if (_.inRange(frequency, 1, 13)) {
+                                this.database.setServerFrequency(message.guild.id, frequency);
+
+                                // Calculate the times that are now active
+                                let times = _.range(1, 13).filter((hour) => hour % frequency === 0);
+
+                                message.channel.send(`Big Ben will now chime at: ${times.join(" O'Clock, ").trim()} O'Clock`);
+                            } else {
+                                message.channel.send("Frequency must be between 1 and 12 (For example: a frequency of 3 would chime at 3 O'Clock, 6 O'Clock, 9 O'Clock and 12 O'Clock)");
+                            }
+                        } else {
+                            message.channel.send(`You must set a voice channel before setting a frequency (!bigbenclock set <voice channel name>)`);
+                        }
+                    });
                 } else if (command === "test") {
                     // Find the servers record
                     this.database.getServer(message.guild.id).then((response) => {
@@ -210,6 +233,9 @@ class TwoamInDiscord {
                 servers.forEach((server) => {
                     // Attempt to find the guild
                     let guild = this.bot.guilds.cache.find((guild) => guild.id === server.server_id);
+
+                    // Determine if we should play a chime based on the servers frequency setting
+                    let playChimes = server.frequency !== null ? hour % server.frequency === 0 : true;
 
                     // Determine if we should play a chime base do the servers "mute until" setting
                     if (server.mute_until && typeof server.mute_until === "string" && moment(server.mute_until).isAfter(moment())) {
